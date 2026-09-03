@@ -1,0 +1,48 @@
+{
+  "database": "./state/state.sqlite3",
+  "archive_dir": "./var/archive",
+  "view_dir": "./var/views",
+  "absence_threshold": 3,
+  "min_absence_interval_seconds": 3600,
+  "lease_seconds": 1800,
+  "web": {"host": "127.0.0.1", "port": 8787, "require_access_headers": true},
+  "discovery": {
+    "enabled": true,
+    "npm_changes_url": "https://replicate.npmjs.com/registry/_changes",
+    "batch_size": 250,
+    "concurrency": 8,
+    "poll_seconds": 60,
+    "scan_interval_seconds": 300
+  },
+  "http": {
+    "timeout_seconds": 20,
+    "max_metadata_bytes": 8388608,
+    "max_artifact_bytes": 536870912,
+    "max_redirects": 3,
+    "user_agent": "malware-archive-detector/0.1 (+github-actions)"
+  },
+  "ecosystems": {
+    "npm": {
+      "official": {
+        "name": "npmjs",
+        "base_url": "https://registry.npmjs.org",
+        "allowed_artifact_hosts": ["registry.npmjs.org"]
+      },
+      "mirrors": [
+        {
+          "name": "npmmirror",
+          "base_url": "https://registry.npmmirror.com",
+          "allowed_artifact_hosts": ["registry.npmmirror.com", "cdn.npmmirror.com"]
+        }
+      ]
+    },
+    "pypi": {
+      "official": {
+        "name": "pypi",
+        "base_url": "https://pypi.org",
+        "allowed_artifact_hosts": ["files.pythonhosted.org"]
+      },
+      "mirrors": []
+    }
+  }
+}

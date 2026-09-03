@@ -1,0 +1,14 @@
+[project]
+name = "malware-archive-detector"
+version = "0.1.0"
+description = "Detect registry takedowns and archive original package artifacts without executing them"
+requires-python = ">=3.11"
+
+[project.scripts]
+malware-archive = "malware_archive.cli:main"
+
+[tool.setuptools.package-data]
+malware_archive = ["web_assets/*.html", "web_assets/*.css", "web_assets/*.js"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

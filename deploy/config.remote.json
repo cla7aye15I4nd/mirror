@@ -1,0 +1,249 @@
+{
+  "database": "/srv/data-island-alert/state.sqlite3",
+  "archive_dir": "/srv/data-island-alert/archive",
+  "view_dir": "/srv/data-island-alert-views",
+  "absence_threshold": 3,
+  "min_absence_interval_seconds": 3600,
+  "lease_seconds": 1800,
+  "web": {
+    "host": "127.0.0.1",
+    "port": 8787,
+    "require_access_headers": true
+  },
+  "discovery": {
+    "enabled": true,
+    "npm_changes_url": "https://replicate.npmjs.com/registry/_changes",
+    "pypi_enabled": true,
+    "pypi_xmlrpc_url": "https://pypi.org/pypi",
+    "pypi_max_changes": 1000,
+    "batch_size": 250,
+    "concurrency": 8,
+    "poll_seconds": 60,
+    "scan_interval_seconds": 300
+  },
+  "http": {
+    "timeout_seconds": 20,
+    "max_metadata_bytes": 8388608,
+    "max_artifact_bytes": 536870912,
+    "max_redirects": 3,
+    "user_agent": "data-island-alert/0.1 (+alert.dataisland.org)"
+  },
+  "intelligence": {
+    "openssf_enabled": true,
+    "osv_api_url": "https://api.osv.dev/v1/query",
+    "feed_base_url": "https://storage.googleapis.com/osv-vulnerabilities",
+    "feed_ecosystems": ["npm", "PyPI", "RubyGems", "crates.io", "Go", "Maven", "NuGet"],
+    "refresh_seconds": 3600,
+    "batch_size": 100,
+    "concurrency": 4,
+    "index_refresh_seconds": 3600,
+    "report_batch_size": 500,
+    "max_report_versions": 200,
+    "capture_batch_size": 10,
+    "capture_concurrency": 2
+  },
+  "trusted_feeds": {
+    "datadog_enabled": true,
+    "datadog_api_url": "https://api.github.com/repos/DataDog/malicious-software-packages-dataset",
+    "refresh_seconds": 3600,
+    "commit_batch_size": 5,
+    "commit_file_pages": 5,
+    "artifact_batch_size": 10
+  },
+  "coverage": {
+    "enabled": true,
+    "window_seconds": 604800,
+    "sequence_span": 3000000,
+    "seed_chunk_size": 10000,
+    "scan_batch_size": 250,
+    "concurrency": 8
+  },
+  "ecosystems": {
+    "npm": {
+      "official": {
+        "name": "npmjs",
+        "base_url": "https://registry.npmjs.org",
+        "allowed_artifact_hosts": ["registry.npmjs.org"],
+        "region": "global"
+      },
+      "mirrors": [
+        {
+          "name": "npmmirror",
+          "base_url": "https://registry.npmmirror.com",
+          "allowed_artifact_hosts": ["registry.npmmirror.com", "cdn.npmmirror.com"],
+          "region": "cn"
+        },
+        {
+          "name": "huawei-npm",
+          "base_url": "https://repo.huaweicloud.com/repository/npm",
+          "allowed_artifact_hosts": ["repo.huaweicloud.com"],
+          "region": "cn"
+        },
+        {
+          "name": "tencent-npm",
+          "base_url": "https://mirrors.cloud.tencent.com/npm",
+          "allowed_artifact_hosts": ["mirrors.cloud.tencent.com"],
+          "region": "cn"
+        }
+      ]
+    },
+    "pypi": {
+      "official": {
+        "name": "pypi",
+        "base_url": "https://pypi.org",
+        "allowed_artifact_hosts": ["files.pythonhosted.org"],
+        "region": "global"
+      },
+      "mirrors": [
+        {
+          "name": "tuna-pypi",
+          "base_url": "https://pypi.tuna.tsinghua.edu.cn/simple",
+          "allowed_artifact_hosts": ["pypi.tuna.tsinghua.edu.cn"],
+          "metadata_format": "pypi-simple",
+          "region": "cn"
+        },
+        {
+          "name": "ustc-pypi",
+          "base_url": "https://mirrors.ustc.edu.cn/pypi/simple",
+          "allowed_artifact_hosts": ["mirrors.ustc.edu.cn"],
+          "metadata_format": "pypi-simple",
+          "region": "cn"
+        },
+        {
+          "name": "bfsu-pypi",
+          "base_url": "https://mirrors.bfsu.edu.cn/pypi/web/simple",
+          "allowed_artifact_hosts": ["mirrors.bfsu.edu.cn"],
+          "metadata_format": "pypi-simple",
+          "region": "cn"
+        },
+        {
+          "name": "aliyun-pypi",
+          "base_url": "https://mirrors.aliyun.com/pypi/simple",
+          "allowed_artifact_hosts": ["mirrors.aliyun.com"],
+          "metadata_format": "pypi-simple",
+          "region": "cn"
+        },
+        {
+          "name": "huawei-pypi",
+          "base_url": "https://repo.huaweicloud.com/repository/pypi/simple",
+          "allowed_artifact_hosts": ["repo.huaweicloud.com"],
+          "metadata_format": "pypi-simple",
+          "region": "cn"
+        },
+        {
+          "name": "tencent-pypi",
+          "base_url": "https://mirrors.cloud.tencent.com/pypi/simple",
+          "allowed_artifact_hosts": ["mirrors.cloud.tencent.com"],
+          "metadata_format": "pypi-simple",
+          "region": "cn"
+        },
+        {
+          "name": "sustech-pypi",
+          "base_url": "https://mirrors.sustech.edu.cn/pypi/web/simple",
+          "allowed_artifact_hosts": ["mirrors.sustech.edu.cn"],
+          "metadata_format": "pypi-simple",
+          "region": "cn"
+        },
+        {
+          "name": "nju-pypi",
+          "base_url": "https://mirror.nju.edu.cn/pypi/web/simple",
+          "allowed_artifact_hosts": ["mirror.nju.edu.cn"],
+          "metadata_format": "pypi-simple",
+          "region": "cn"
+        },
+        {
+          "name": "sjtu-pypi",
+          "base_url": "https://mirror.sjtu.edu.cn/pypi/web/simple",
+          "allowed_artifact_hosts": ["mirror.sjtu.edu.cn"],
+          "metadata_format": "pypi-simple",
+          "region": "cn"
+        }
+      ]
+    },
+    "rubygems": {
+      "official": {
+        "name": "rubygems.org",
+        "base_url": "https://rubygems.org",
+        "allowed_artifact_hosts": ["rubygems.org"],
+        "metadata_format": "rubygems-api",
+        "region": "global"
+      },
+      "mirrors": [
+        {
+          "name": "tuna-rubygems",
+          "base_url": "https://mirrors.tuna.tsinghua.edu.cn/rubygems",
+          "allowed_artifact_hosts": ["mirrors.tuna.tsinghua.edu.cn"],
+          "metadata_format": "artifact-template",
+          "artifact_url_template": "https://mirrors.tuna.tsinghua.edu.cn/rubygems/gems/{filename}",
+          "region": "cn"
+        }
+      ]
+    },
+    "crates.io": {
+      "official": {
+        "name": "crates.io",
+        "base_url": "https://index.crates.io",
+        "allowed_artifact_hosts": ["static.crates.io"],
+        "metadata_format": "cargo-sparse",
+        "artifact_url_template": "https://static.crates.io/crates/{name}/{filename}",
+        "region": "global"
+      },
+      "mirrors": [
+        {
+          "name": "rsproxy",
+          "base_url": "https://rsproxy.cn/index",
+          "allowed_artifact_hosts": ["rsproxy.cn", "lf3-static.rsproxy.cn"],
+          "metadata_format": "cargo-sparse",
+          "artifact_url_template": "https://rsproxy.cn/api/v1/crates/{name}/{version}/download",
+          "region": "cn"
+        }
+      ]
+    },
+    "go": {
+      "official": {
+        "name": "go-module-mirror",
+        "base_url": "https://proxy.golang.org",
+        "allowed_artifact_hosts": ["proxy.golang.org"],
+        "metadata_format": "go-proxy",
+        "region": "global"
+      },
+      "mirrors": [
+        {
+          "name": "goproxy.cn",
+          "base_url": "https://goproxy.cn",
+          "allowed_artifact_hosts": ["goproxy.cn"],
+          "metadata_format": "go-proxy",
+          "region": "cn"
+        }
+      ]
+    },
+    "maven": {
+      "official": {
+        "name": "maven-central",
+        "base_url": "https://repo.maven.apache.org/maven2",
+        "allowed_artifact_hosts": ["repo.maven.apache.org"],
+        "metadata_format": "maven-repository",
+        "region": "global"
+      },
+      "mirrors": [
+        {
+          "name": "aliyun-maven",
+          "base_url": "https://maven.aliyun.com/repository/central",
+          "allowed_artifact_hosts": ["maven.aliyun.com"],
+          "metadata_format": "maven-repository",
+          "region": "cn"
+        }
+      ]
+    },
+    "nuget": {
+      "official": {
+        "name": "nuget.org",
+        "base_url": "https://api.nuget.org/v3-flatcontainer",
+        "allowed_artifact_hosts": ["api.nuget.org"],
+        "metadata_format": "nuget-flat",
+        "region": "global"
+      },
+      "mirrors": []
+    }
+  }
+}

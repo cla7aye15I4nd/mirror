@@ -1,0 +1,150 @@
+{
+  "database": "./var/state.sqlite3",
+  "archive_dir": "./var/archive",
+  "view_dir": "./var/views",
+  "absence_threshold": 3,
+  "min_absence_interval_seconds": 3600,
+  "lease_seconds": 1800,
+  "web": {
+    "host": "127.0.0.1",
+    "port": 8787,
+    "require_access_headers": true
+  },
+  "intelligence": {
+    "openssf_enabled": true,
+    "osv_api_url": "https://api.osv.dev/v1/query",
+    "feed_base_url": "https://storage.googleapis.com/osv-vulnerabilities",
+    "feed_ecosystems": ["npm", "PyPI", "RubyGems", "crates.io", "Go", "Maven", "NuGet"],
+    "refresh_seconds": 3600,
+    "batch_size": 100,
+    "concurrency": 4,
+    "index_refresh_seconds": 3600,
+    "report_batch_size": 500,
+    "max_report_versions": 200,
+    "capture_batch_size": 10,
+    "capture_concurrency": 2
+  },
+  "coverage": {
+    "enabled": true,
+    "window_seconds": 604800,
+    "sequence_span": 3000000,
+    "seed_chunk_size": 10000,
+    "scan_batch_size": 250,
+    "concurrency": 8
+  },
+  "discovery": {
+    "enabled": true,
+    "npm_changes_url": "https://replicate.npmjs.com/registry/_changes",
+    "batch_size": 250,
+    "concurrency": 8,
+    "poll_seconds": 60,
+    "scan_interval_seconds": 300
+  },
+  "http": {
+    "timeout_seconds": 20,
+    "max_metadata_bytes": 8388608,
+    "max_artifact_bytes": 536870912,
+    "max_redirects": 3,
+    "user_agent": "malware-archive-detector/0.1"
+  },
+  "ecosystems": {
+    "npm": {
+      "official": {
+        "name": "npmjs",
+        "base_url": "https://registry.npmjs.org",
+        "allowed_artifact_hosts": ["registry.npmjs.org"]
+      },
+      "mirrors": [
+        {
+          "name": "npmmirror",
+          "base_url": "https://registry.npmmirror.com",
+          "allowed_artifact_hosts": ["registry.npmmirror.com", "cdn.npmmirror.com"]
+        }
+      ]
+    },
+    "pypi": {
+      "official": {
+        "name": "pypi",
+        "base_url": "https://pypi.org",
+        "allowed_artifact_hosts": ["files.pythonhosted.org"]
+      },
+      "mirrors": []
+    },
+    "rubygems": {
+      "official": {
+        "name": "rubygems.org",
+        "base_url": "https://rubygems.org",
+        "allowed_artifact_hosts": ["rubygems.org"],
+        "metadata_format": "rubygems-api"
+      },
+      "mirrors": [
+        {
+          "name": "tuna-rubygems",
+          "base_url": "https://mirrors.tuna.tsinghua.edu.cn/rubygems",
+          "allowed_artifact_hosts": ["mirrors.tuna.tsinghua.edu.cn"],
+          "metadata_format": "artifact-template",
+          "artifact_url_template": "https://mirrors.tuna.tsinghua.edu.cn/rubygems/gems/{filename}"
+        }
+      ]
+    },
+    "crates.io": {
+      "official": {
+        "name": "crates.io",
+        "base_url": "https://index.crates.io",
+        "allowed_artifact_hosts": ["static.crates.io"],
+        "metadata_format": "cargo-sparse",
+        "artifact_url_template": "https://static.crates.io/crates/{name}/{filename}"
+      },
+      "mirrors": [
+        {
+          "name": "rsproxy",
+          "base_url": "https://rsproxy.cn/index",
+          "allowed_artifact_hosts": ["rsproxy.cn", "lf3-static.rsproxy.cn"],
+          "metadata_format": "cargo-sparse",
+          "artifact_url_template": "https://rsproxy.cn/api/v1/crates/{name}/{version}/download"
+        }
+      ]
+    },
+    "go": {
+      "official": {
+        "name": "go-module-mirror",
+        "base_url": "https://proxy.golang.org",
+        "allowed_artifact_hosts": ["proxy.golang.org"],
+        "metadata_format": "go-proxy"
+      },
+      "mirrors": [
+        {
+          "name": "goproxy.cn",
+          "base_url": "https://goproxy.cn",
+          "allowed_artifact_hosts": ["goproxy.cn"],
+          "metadata_format": "go-proxy"
+        }
+      ]
+    },
+    "maven": {
+      "official": {
+        "name": "maven-central",
+        "base_url": "https://repo.maven.apache.org/maven2",
+        "allowed_artifact_hosts": ["repo.maven.apache.org"],
+        "metadata_format": "maven-repository"
+      },
+      "mirrors": [
+        {
+          "name": "aliyun-maven",
+          "base_url": "https://maven.aliyun.com/repository/central",
+          "allowed_artifact_hosts": ["maven.aliyun.com"],
+          "metadata_format": "maven-repository"
+        }
+      ]
+    },
+    "nuget": {
+      "official": {
+        "name": "nuget.org",
+        "base_url": "https://api.nuget.org/v3-flatcontainer",
+        "allowed_artifact_hosts": ["api.nuget.org"],
+        "metadata_format": "nuget-flat"
+      },
+      "mirrors": []
+    }
+  }
+}

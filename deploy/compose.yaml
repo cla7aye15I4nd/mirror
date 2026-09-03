@@ -1,0 +1,73 @@
+name: data-island-alert
+
+x-alert-service: &alert-service
+  build:
+    context: ..
+    dockerfile: deploy/Dockerfile
+  image: data-island-alert:local
+  user: "1000:1000"
+  network_mode: host
+  read_only: true
+  init: true
+  restart: unless-stopped
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  tmpfs:
+    - /tmp:rw,noexec,nosuid,size=16m
+  volumes:
+    - /etc/data-island-alert/config.json:/etc/data-island-alert/config.json:ro
+    - /srv/data-island-alert:/srv/data-island-alert
+
+services:
+  web:
+    <<: *alert-service
+    command: ["--config", "/etc/data-island-alert/config.json", "serve"]
+    volumes:
+      - /etc/data-island-alert/config.json:/etc/data-island-alert/config.json:ro
+      - /srv/data-island-alert:/srv/data-island-alert
+      - /srv/data-island-alert-views:/srv/data-island-alert-views:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import json,urllib.request; assert json.load(urllib.request.urlopen('http://127.0.0.1:8787/healthz', timeout=2))['ok']"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  daemon:
+    <<: *alert-service
+    command: ["--config", "/etc/data-island-alert/config.json", "daemon"]
+
+  viewer:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: data-island-alert:local
+    entrypoint: ["python", "-m", "artifact_viewer"]
+    command:
+      - "--archive-root"
+      - "/state/archive"
+      - "--output"
+      - "/views"
+      - "--request-root"
+      - "/state/view-requests"
+      - "--poll-seconds"
+      - "1"
+    user: "1000:1000"
+    network_mode: none
+    read_only: true
+    init: true
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 512m
+    cpus: 1.0
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=32m
+    volumes:
+      - /srv/data-island-alert:/state:ro
+      - /srv/data-island-alert-views:/views
